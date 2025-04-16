@@ -437,16 +437,8 @@ def save_to_excel(fileName, D, D_aggregated, check, total_split=pd.DataFrame(), 
     yieldFilterName=pd.DataFrame(), filt_Amp=pd.DataFrame(), filt_App=pd.DataFrame(), GhoshZfilter=pd.DataFrame(),\
     GhoshYfilter=pd.DataFrame(),MarketShares=pd.DataFrame(), Ztransferred=pd.DataFrame(), Ytransferred=pd.DataFrame(),\
     filter_transf=pd.DataFrame(),filt_ParGhosh=pd.DataFrame()):
-    
-    # Ensure the output directory path is correctly formed and creates directories if they don't exist
-    output_dir = os.path.normpath(os.path.join('output', fileName))
-    os.makedirs(output_dir, exist_ok=True)  # This creates all intermediate directories as neededgi
 
-    timestamp = datetime.today().strftime('%y%m%d-%H%M%S')
-    output_path = os.path.join(output_dir, f"{fileName}_Run_{timestamp}.xlsx")
-
-    writer = pd.ExcelWriter(output_path)
-
+    writer = pd.ExcelWriter('./output/' + fileName + '_Run_{}.xlsx'.format(datetime.today().strftime('%y%m%d-%H%M%S')))
 
     D_aggregated.to_excel(writer,'EndUse_shares_agg')
     D.to_excel(writer,'EndUse_shares')
