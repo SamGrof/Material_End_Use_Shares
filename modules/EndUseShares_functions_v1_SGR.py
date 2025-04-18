@@ -8,7 +8,8 @@ Created on Wed Apr 22 08:53:52 2020
 
 import numpy as np
 import pandas as pd
-
+import os
+from datetime import datetime
 
 '''
 # APPLICATION OF METHODS TO DERIVE END-USE SHARES
@@ -64,7 +65,11 @@ def create_WIOMassFilter_withServiceRawMatInput(A, raw_materials, materials, pro
 def assemble_yield_filter(aggregation_matrix, raw_yield_df, Z_orig, yield_filter):    
     S = aggregation_matrix.droplevel(0).replace(0,np.nan)
     sector_aggretation_labels = pd.DataFrame(S.stack(level=0).reset_index(level=1).groupby(level=0, sort=False)['level_1'].apply(list))
-    
+   
+    # Two print statements for dimensionality check, because SGR changed sector dimensions.
+    #print("raw_yield_df shape:", raw_yield_df.shape)
+    #print("sector_aggretation_labels shape:", sector_aggretation_labels.shape)
+   
     for i, row in raw_yield_df.iterrows():
         for j, row2 in sector_aggretation_labels.iterrows():
             yield_filter.loc[[i],[sector_aggretation_labels.loc[j]['level_1']][0]] = raw_yield_df.loc[i][j]
@@ -436,7 +441,9 @@ def save_to_excel(fileName, D, D_aggregated, check, total_split=pd.DataFrame(), 
     yieldFilterName=pd.DataFrame(), filt_Amp=pd.DataFrame(), filt_App=pd.DataFrame(), GhoshZfilter=pd.DataFrame(),\
     GhoshYfilter=pd.DataFrame(),MarketShares=pd.DataFrame(), Ztransferred=pd.DataFrame(), Ytransferred=pd.DataFrame(),\
     filter_transf=pd.DataFrame(),filt_ParGhosh=pd.DataFrame()):
-    writer = pd.ExcelWriter('./output/' + fileName + '_Run_{}.xlsx'.format(pd.datetime.today().strftime('%y%m%d-%H%M%S')))
+
+    writer = pd.ExcelWriter('./output/' + fileName + '_Run_{}.xlsx'.format(datetime.today().strftime('%y%m%d-%H%M%S')))
+
     D_aggregated.to_excel(writer,'EndUse_shares_agg')
     D.to_excel(writer,'EndUse_shares')
     check.to_excel(writer,'check_100%')
@@ -452,4 +459,4 @@ def save_to_excel(fileName, D, D_aggregated, check, total_split=pd.DataFrame(), 
     filter_transf.to_excel(writer,'filter_EndUseTransfer')
     Ztransferred.to_excel(writer,'Z_afterEndUseTransfer')
     Ytransferred.to_excel(writer,'Y_afterEndUseTransfer')
-    writer.save()
+    writer.close()
