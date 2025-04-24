@@ -8,7 +8,8 @@ Created on Wed Apr 22 08:53:52 2020
 
 import numpy as np
 import pandas as pd
-
+import os #Added by SGR because pd.datetime does not exist enymore
+from datetime import datetime
 
 '''
 # APPLICATION OF METHODS TO DERIVE END-USE SHARES
@@ -436,7 +437,9 @@ def save_to_excel(fileName, D, D_aggregated, check, total_split=pd.DataFrame(), 
     yieldFilterName=pd.DataFrame(), filt_Amp=pd.DataFrame(), filt_App=pd.DataFrame(), GhoshZfilter=pd.DataFrame(),\
     GhoshYfilter=pd.DataFrame(),MarketShares=pd.DataFrame(), Ztransferred=pd.DataFrame(), Ytransferred=pd.DataFrame(),\
     filter_transf=pd.DataFrame(),filt_ParGhosh=pd.DataFrame()):
-    writer = pd.ExcelWriter('./output/' + fileName + '_Run_{}.xlsx'.format(pd.datetime.today().strftime('%y%m%d-%H%M%S')))
+    
+    writer = pd.ExcelWriter('./output/' + fileName + '_Run_{}.xlsx'.format(datetime.today().strftime('%y%m%d-%H%M%S')))
+
     D_aggregated.to_excel(writer,'EndUse_shares_agg')
     D.to_excel(writer,'EndUse_shares')
     check.to_excel(writer,'check_100%')
@@ -452,4 +455,4 @@ def save_to_excel(fileName, D, D_aggregated, check, total_split=pd.DataFrame(), 
     filter_transf.to_excel(writer,'filter_EndUseTransfer')
     Ztransferred.to_excel(writer,'Z_afterEndUseTransfer')
     Ytransferred.to_excel(writer,'Y_afterEndUseTransfer')
-    writer.save()
+    writer.close()
