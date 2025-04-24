@@ -38,10 +38,11 @@ for extension in extensions:
         Y_orig = pd.read_excel(data_path + 'Y_' + year + '_ImpNoExpNoCII' + extension + '.xlsx',index_col=[0,1]) # final demand vector (treatment of imports, exports and CII as specified in file name)
         # make sure multiindex and multiindex names of A,Y,Z, filter_matrix are matching (also their formats in Excel files); if code not working and in doubt why, check content overlap and copy multiindex of matrices to filter matrix
         
-        filter_matrix = pd.read_excel(data_path + 'Filter_' + year  + extension + '.xlsx',index_col=[0,1],header=[0,1],sheet_name='mass_&_aggreg') # filter and aggregation matrix
+        #Added the SRG Ending, such that original date is left untouched.
+        filter_matrix = pd.read_excel(data_path + 'Filter_' + year  + extension + '_SGR' + '.xlsx',index_col=[0,1],header=[0,1],sheet_name='mass_&_aggreg') # filter and aggregation matrix
         
-        #Somehow the index of raw_yield_df got messed up. Perhaps because i opened the excel shet with LibreOffice..
-        raw_yield_df = pd.read_excel(data_path + 'Filter_' + year  + extension + '.xlsx',index_col=[0,1],header=[0],sheet_name='yield') #header=[0]
+        #Added the SRG Ending, such that original date is left untouched.
+        raw_yield_df = pd.read_excel(data_path + 'Filter_' + year  + extension +'_SGR' + '.xlsx',index_col=[0,1],header=[0],sheet_name='yield') #header=[0]
 
 
 
